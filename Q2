@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+
+int main() {
+    pid_t pid1, pid2;
+
+    // Create first child
+    pid1 = fork();
+
+    if (pid1 < 0) {
+        printf("Failed to create first child.\n");
+        return 1;
+    }
+
+    if (pid1 == 0) {
+        // First child process
+        printf("First Child: PID = %d, Parent PID = %d\n", getpid(), getppid());
+        return 0;
+    }
+
+    // Create second child (only parent executes this)
+    pid2 = fork();
+
+    if (pid2 < 0) {
+        printf("Failed to create second child.\n");
+        return 1;
+    }
+
+    if (pid2 == 0) {
+        // Second child process
+        printf("Second Child: PID = %d, Parent PID = %d\n", getpid(), getppid());
+        return 0;
+    }
+
+    // Parent process
+    printf("Parent: PID = %d\n", getpid());
+
+    // Wait for both children to finish
+    wait(NULL);
+    wait(NULL);
+
+    return 0;
+}
