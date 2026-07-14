@@ -1,0 +1,59 @@
+#include <stdio.h>
+
+#define MAX 20
+
+int main() {
+    int frames[MAX], pages[MAX];
+    int n, f, i, j;
+    int pageFaults = 0;
+    int front = 0;
+
+    printf("Enter number of pages: ");
+    scanf("%d", &n);
+
+    printf("Enter page reference string: ");
+    for (i = 0; i < n; i++)
+        scanf("%d", &pages[i]);
+
+    printf("Enter number of frames: ");
+    scanf("%d", &f);
+
+    // Initialize frames as empty
+    for (i = 0; i < f; i++)
+        frames[i] = -1;
+
+    printf("\nPage\tFrames\n");
+
+    for (i = 0; i < n; i++) {
+        int found = 0;
+
+        // Check if page is already in a frame
+        for (j = 0; j < f; j++) {
+            if (frames[j] == pages[i]) {
+                found = 1;
+                break;
+            }
+        }
+
+        // Page fault
+        if (!found) {
+            frames[front] = pages[i];
+            front = (front + 1) % f;
+            pageFaults++;
+        }
+
+        // Display current frame contents
+        printf("%d\t", pages[i]);
+        for (j = 0; j < f; j++) {
+            if (frames[j] == -1)
+                printf("- ");
+            else
+                printf("%d ", frames[j]);
+        }
+        printf("\n");
+    }
+
+    printf("\nTotal Page Faults = %d\n", pageFaults);
+
+    return 0;
+}
