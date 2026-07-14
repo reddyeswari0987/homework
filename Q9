@@ -1,0 +1,69 @@
+#include <stdio.h>
+
+#define SIZE 5
+
+int buffer[SIZE];
+int front = 0, rear = -1, count = 0;
+
+// Produce an item
+void produce(int item) {
+    if (count == SIZE) {
+        printf("Buffer is Full! Cannot produce %d\n", item);
+        return;
+    }
+
+    rear = (rear + 1) % SIZE;
+    buffer[rear] = item;
+    count++;
+
+    printf("Produced: %d\n", item);
+}
+
+// Consume an item
+void consume() {
+    if (count == 0) {
+        printf("Buffer is Empty! Nothing to consume\n");
+        return;
+    }
+
+    int item = buffer[front];
+    front = (front + 1) % SIZE;
+    count--;
+
+    printf("Consumed: %d\n", item);
+}
+
+// Display buffer contents
+void display() {
+    if (count == 0) {
+        printf("Buffer is Empty\n");
+        return;
+    }
+
+    printf("Buffer: ");
+    for (int i = 0; i < count; i++) {
+        printf("%d ", buffer[(front + i) % SIZE]);
+    }
+    printf("\n");
+}
+
+int main() {
+    produce(10);
+    produce(20);
+    produce(30);
+    display();
+
+    consume();
+    display();
+
+    produce(40);
+    produce(50);
+    produce(60);
+    display();
+
+    consume();
+    consume();
+    display();
+
+    return 0;
+}
