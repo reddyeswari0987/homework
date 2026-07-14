@@ -1,0 +1,73 @@
+#include <stdio.h>
+
+#define MAX 10
+
+int queue[MAX];
+int front = -1, rear = -1;
+
+// Add process to ready queue
+void enqueue(int pid) {
+    if (rear == MAX - 1) {
+        printf("Ready Queue is Full!\n");
+        return;
+    }
+
+    if (front == -1)
+        front = 0;
+
+    queue[++rear] = pid;
+}
+
+// Remove process from ready queue
+int dequeue() {
+    if (front == -1 || front > rear)
+        return -1;
+
+    return queue[front++];
+}
+
+// Display ready queue
+void displayQueue() {
+    if (front == -1 || front > rear) {
+        printf("Ready Queue is Empty!\n");
+        return;
+    }
+
+    printf("Ready Queue: ");
+    for (int i = front; i <= rear; i++)
+        printf("P%d ", queue[i]);
+    printf("\n");
+}
+
+// Simulate FCFS Scheduler
+void scheduler() {
+    int pid;
+
+    printf("\n--- Scheduler Started ---\n");
+
+    while ((pid = dequeue()) != -1) {
+        printf("Executing Process P%d...\n", pid);
+
+        // Simulate execution
+        for (volatile long i = 0; i < 100000000; i++);
+
+        printf("Process P%d Completed.\n", pid);
+    }
+
+    printf("--- All Processes Executed ---\n");
+}
+
+int main() {
+    enqueue(1);
+    enqueue(2);
+    enqueue(3);
+    enqueue(4);
+
+    displayQueue();
+
+    scheduler();
+
+    displayQueue();
+
+    return 0;
+}
